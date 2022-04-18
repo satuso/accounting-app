@@ -1,0 +1,8 @@
+POST http://localhost:3001/api/entries
+Content-Type: application/json 
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBlbGxlQHBlbGxlLmNvbSIsImlkIjoiNjI1OTljMDhkOTM2ZDI0NzYyZjY1NjcyIiwiaWF0IjoxNjUwMDQ1MjM0fQ.h44PmKhdAJEisr0ZfbtcClcDjbjPtTOAXZ4D5nQ8CQA
+
+{
+  "date": "15-04-2022",
+  "description": "Pelle koulu"
+}

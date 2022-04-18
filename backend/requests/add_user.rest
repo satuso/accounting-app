@@ -1,0 +1,13 @@
+POST http://localhost:3001/api/users 
+Content-Type: application/json
+
+{ 
+  "email": "aku@ankka.fi",
+  "businessId": "1234567-8",
+  "vatId": "FI12345678",
+  "name": "Aku Oy",
+  "address": "Ankkalinnantie 1",
+  "postalCode": "00000",
+  "city": "Ankkalinna",
+  "password": "password"
+}
