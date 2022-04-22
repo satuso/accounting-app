@@ -1,7 +1,7 @@
 import React from "react"
 import Button from "react-bootstrap/Button"
 
-const Entry = ({ entry, index, deleteEntry, user }) => {
+const Entry = ({ entry, index, removeEntry, user }) => {
   const entryIndex = index + 1
 
   return (
@@ -19,7 +19,7 @@ const Entry = ({ entry, index, deleteEntry, user }) => {
       <td>{entry.priceWithoutVat} €</td>
       <td>{entry.priceWithVat} €</td>
       <td>{entry.sum} €</td>
-      <td><Button variant="danger" onClick={() => deleteEntry(entry.id, entry, user)}>Poista</Button></td>
+      <td><Button variant="danger" onClick={() => removeEntry(entry.id, entry, user)}>Poista</Button></td>
     </tr>
   )
 }

@@ -1,11 +1,11 @@
 import React from "react"
-import { useStore } from "../store"
 import html2canvas from "html2canvas"
 import { jsPDF } from "jspdf"
 import Button from "react-bootstrap/Button"
 import Table from "react-bootstrap/Table"
 
-const Invoice = ({ 
+const Invoice = ({
+  user, 
   setShow,
   date,
   description,
@@ -30,8 +30,6 @@ const Invoice = ({
   dueDate
 }) => {
   const printRef = React.useRef()
-
-  const { user } = useStore()
 
   const handleDownloadPdf = async () => {
     const element = printRef.current

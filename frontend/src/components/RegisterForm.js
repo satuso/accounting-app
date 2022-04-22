@@ -2,13 +2,12 @@ import React, { useState } from "react"
 import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
 import Card from "react-bootstrap/Card"
-import { useStore } from "../store"
 import { useNavigate } from "react-router-dom"
 import usersService from "../services/users"
 import loginService from "../services/login"
 import entryService from "../services/entries"
 
-const RegisterForm = () => {
+const RegisterForm = ({ setUser, users }) => {
   const [email, setEmail] = useState("") 
   const [password, setPassword] = useState("") 
   const [passwordConfirm, setPasswordConfirm] = useState("") 
@@ -21,16 +20,16 @@ const RegisterForm = () => {
   const [iban, setIban] = useState("")
   const [bic, setBic] = useState("")
 
-  const { setMessage, setUser, users } = useStore()
-
   const navigate = useNavigate()
 
   const handleRegister = async (e) => {
     e.preventDefault()
     try {
-      const emails = users.map(user => user.email.toLowerCase())
-      if (emails.includes(email.toLowerCase())){
-        return setMessage("Sähköposti on jo käytössä", "danger")
+      if (users.length > 0){
+        const emails = users.map(user => user.email.toLowerCase())
+        if (emails.includes(email.toLowerCase())){
+          return //setMessage("Sähköposti on jo käytössä", "danger")
+        }
       }
       if (password === passwordConfirm){
         await usersService.create({
@@ -53,12 +52,13 @@ const RegisterForm = () => {
         setPostalCode("")
         setCity("")
         navigate("/profile")
-        setMessage("Tunnus luotu! Olet nyt kirjautuneena sisään", "success")
+        //setMessage("Tunnus luotu! Olet nyt kirjautuneena sisään", "success")
       } else {
-        setMessage("Salasana ei täsmää", "danger")
+        //setMessage("Salasana ei täsmää", "danger")
       }
     } catch (exception) {
-      setMessage("Rekisteröityminen epäonnistui", "danger")
+      console.log(exception)
+      //setMessage("Rekisteröityminen epäonnistui", "danger")
     }
   }
 

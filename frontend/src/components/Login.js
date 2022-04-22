@@ -5,33 +5,32 @@ import Card from "react-bootstrap/Card"
 import { useNavigate } from "react-router-dom"
 import loginService from "../services/login"
 import entryService from "../services/entries"
-import { useStore } from "../store"
 
-const Login = () => {
+const Login = ({ user, setUser }) => {
   const [email, setEmail] = useState("") 
-  const [password, setPassword] = useState("") 
-
-  const { setUser, setMessage } = useStore()
+  const [password, setPassword] = useState("")
 
   const navigate = useNavigate()
 
   const handleLogin = async (event) => {
     event.preventDefault()
+    console.log("click")
     try {
-      const user = await loginService.login({
-        email, password,
+      const loggedInUser = await loginService.login({
+        email, password
       })
       window.localStorage.setItem(
-        "loggedInUser", JSON.stringify(user)
-      ) 
+        "loggedInUser", JSON.stringify(loggedInUser)
+      )
+      setUser(loggedInUser)
       entryService.setToken(user.token)
-      setUser(user)
       setEmail("")
       setPassword("")
       navigate("/profile")
-      setMessage("Kirjautuminen onnistui", "success")
+      //setMessage("Kirjautuminen onnistui", "success")
     } catch (exception) {
-      setMessage("Kirjautuminen epäonnistui", "danger")
+      console.log(exception)
+      //setMessage("Kirjautuminen epäonnistui", "danger")
     }
   }
 

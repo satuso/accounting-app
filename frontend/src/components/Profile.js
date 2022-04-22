@@ -1,5 +1,4 @@
 import React, { useState } from "react"
-import { useStore } from "../store"
 import Card from "react-bootstrap/Card"
 import Button from "react-bootstrap/Button"
 import { useNavigate } from "react-router-dom"
@@ -7,10 +6,8 @@ import usersService from "../services/users"
 import entryService from "../services/entries"
 import EditProfileForm from "./EditProfileForm"
 
-const Profile = () => {
+const Profile = ({ user, setUser, entries }) => {
   const [show, setShow] = useState(false)
-
-  const { user, setUser, setMessage, entries } = useStore()
 
   const navigate = useNavigate()
 
@@ -24,9 +21,9 @@ const Profile = () => {
         window.localStorage.removeItem("loggedInUser")
         setUser(null)
         navigate("/")
-        setMessage("Tunnus poistettu", "success")
+        //setMessage("Tunnus poistettu", "success")
       } catch (exception) {
-        setMessage("Tunnuksen poistaminen epäonnistui", "danger")
+        //setMessage("Tunnuksen poistaminen epäonnistui", "danger")
       }
     }
   }
@@ -53,7 +50,7 @@ const Profile = () => {
           <Button variant="warning" onClick={() => setShow((!show))}>Muokkaa</Button> <Button variant="danger" onClick={() => deleteUser(user.id)}>Poista tunnus</Button>
         </Card.Body>
       </Card>
-      {show && <EditProfileForm show={show} setShow={setShow} />}
+      {show && <EditProfileForm show={show} setShow={setShow} user={user} setUser={setUser}/>}
     </main>
   )
 }

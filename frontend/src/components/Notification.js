@@ -1,9 +1,9 @@
 import React from "react"
 import Alert from "react-bootstrap/Alert"
-import { useStore } from "../store"
 
 const Notification = () => {
-  const { notification, style } = useStore()
+  const notification = ""
+  const style= ""
   return (
     <div className="notification">
       {notification && 

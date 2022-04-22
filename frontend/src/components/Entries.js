@@ -1,16 +1,16 @@
 import React from "react"
 import Table from "react-bootstrap/Table"
-import { useStore } from "../store"
 import Entry from "./Entry"
-import entryService from "../services/entries"
+import { useDispatch } from "react-redux"
+import { deleteEntry } from "../reducers/entryReducer"
 
-const Entries = () => {
-  const { user, users, setMessage } = useStore()
+const Entries = ({ user, entries }) => {
+  const dispatch = useDispatch()
 
-  const userMatch = user && users.find(userMatch => user.id === userMatch.id)
-  const entries = userMatch && userMatch.entries?.map(entry => entry)
-  const incomeEntries = entries?.filter(entry => entry.type === "Tulo")
-  const expenseEntries = entries?.filter(entry => entry.type === "Kulu")
+  const entriesByUser = user && entries.filter(entry => entry.user?.id === user?.id)
+  const incomeEntries = entriesByUser?.filter(entry => entry.type === "Tulo")
+  const expenseEntries = entriesByUser?.filter(entry => entry.type === "Kulu")
+
   //income:
   //vat24%
   const vat24Entries = incomeEntries?.filter(entry => entry.vatPercent === 24)
@@ -63,13 +63,13 @@ const Entries = () => {
   const totalVatSumE = getSum(vat24ListE) + getSum(vat14ListE) + getSum(vat10ListE)
   const totalSumE = getSum(total24E) + getSum(total14E) + getSum(total10E)
 
-  const deleteEntry = async (id, entry, user) => {
+  const removeEntry = async (id, entry, user) => {
     if (window.confirm("Haluatko varmasti poistaa tietueen?")){
       try {
-        await entryService.remove(id, entry, user)
-        setMessage("Tietue poistettu", "success")
+        dispatch(deleteEntry(entry.id, entry, user))
+        //setMessage("Tietue poistettu", "success")
       } catch (exception) {
-        setMessage("Tietueen poistaminen epäonnistui", "danger")
+        //setMessage("Tietueen poistaminen epäonnistui", "danger")
       }
     }
   }
@@ -99,7 +99,7 @@ const Entries = () => {
           </tr>
         </thead>
         <tbody>
-          {userMatch && entries.map((entry, index) => <Entry key={entry.id} index={index} entry={entry} deleteEntry={deleteEntry} user={user}/>)}
+          {entries.map((entry, index) => <Entry key={entry.id} index={index} entry={entry} removeEntry={removeEntry} user={user}/>)}
         </tbody>
       </Table>
       <br/>

@@ -4,15 +4,16 @@ import NavDropdown from "react-bootstrap/NavDropdown"
 import Nav from "react-bootstrap/Nav"
 import Container from "react-bootstrap/Container"
 import { Link } from "react-router-dom"
-import { useStore } from "../store"
+import { useNavigate } from "react-router-dom"
 
-const Header = () => {
-  const { user, setUser, setMessage } = useStore()
+const Header = ({ user, setUser }) => {
+  const navigate = useNavigate()
 
   const handleLogout = () => {
     window.localStorage.removeItem("loggedInUser")
     setUser(null)
-    setMessage("Kirjauduit ulos", "success")
+    navigate("/")
+    //setMessage("Kirjauduit ulos", "success")
   }
 
   return (

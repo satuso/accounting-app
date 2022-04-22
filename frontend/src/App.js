@@ -1,4 +1,4 @@
-import React, { useEffect }  from "react"
+import React, { useState, useEffect }  from "react"
 import Header from "./components/Header"
 import Home from "./components/Home"
 import NewEntryForm from "./components/NewEntryForm"
@@ -7,47 +7,48 @@ import Entries from "./components/Entries"
 import Login from "./components/Login"
 import Profile from "./components/Profile"
 import RegisterForm from "./components/RegisterForm"
-import { useStore } from "./store"
 import entryService from "./services/entries"
-import usersService from "./services/users"
 import NewInvoiceForm from "./components/NewInvoiceForm"
 import Notification from "./components/Notification"
+import { useDispatch, useSelector } from "react-redux"
+import { initializeEntries } from "./reducers/entryReducer"
+import { initializeUsers } from "./reducers/userReducer"
 
 const App = () => {
-  const { setUser, setEntries, setUsers } = useStore()
+  const [user, setUser] = useState(null)
+  const dispatch = useDispatch()
+
+  const entries = useSelector(state => state.entries)
+  let entriesCopy = [...entries]
+
+  const users = useSelector(state => state.users)
+  let usersCopy = [...users]
 
   useEffect(() => {
-    entryService.getAll().then(entries =>
-      setEntries(entries)
-    )
-  }, [])
-
-  useEffect(() => {
-    usersService.getAll().then(users =>
-      setUsers(users)
-    )
+    dispatch(initializeEntries())
+    dispatch(initializeUsers())
   }, [])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedInUser")
     if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      entryService.setToken(user.token)
+      const loggedInUser = JSON.parse(loggedUserJSON)
+      entryService.setToken(loggedInUser.token)
+      setUser(loggedInUser)
     }
   }, [])
 
   return (
     <>
-      <Header />
+      <Header user={user} setUser={setUser}/>
       <Notification />
       <Routes>
-        <Route path="/new-entry" element={<NewEntryForm />}></Route>
-        <Route path="/entries" element={<Entries />}></Route>
-        <Route path="/invoice" element={<NewInvoiceForm />}></Route>
-        <Route path="/profile" element={<Profile />}></Route>
-        <Route path="/register" element={<RegisterForm />}></Route>
-        <Route path="/login" element={<Login />}></Route>
+        <Route path="/new-entry" element={<NewEntryForm user={user}/>}></Route>
+        <Route path="/entries" element={<Entries user={user} users={usersCopy} entries={entriesCopy}/>}></Route>
+        <Route path="/invoice" element={<NewInvoiceForm user={user} />}></Route>
+        <Route path="/profile" element={<Profile entries={entriesCopy} setUser={setUser} user={user} />}></Route>
+        <Route path="/register" element={<RegisterForm user={user} users={usersCopy} setUser={setUser}/>}></Route>
+        <Route path="/login" element={<Login user={user} setUser={setUser}/>}></Route>
         <Route path="/" element={<Home />}></Route>
       </Routes>
     </>

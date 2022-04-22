@@ -2,10 +2,9 @@ import React, { useState, useEffect } from "react"
 import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
 import Card from "react-bootstrap/Card"
-import { useStore } from "../store"
 import Invoice from "./Invoice"
 
-const NewInvoiceForm = () => {
+const NewInvoiceForm = ({ user }) => {
   const [show, setShow] = useState(false)
   const [name, setName] = useState("")
   const [businessId, setBusinessId] = useState("")
@@ -29,8 +28,6 @@ const NewInvoiceForm = () => {
   const [interest, setInterest] = useState(8)
   const [refNum, setRefNum] = useState("")
   const [dueDate, setDueDate] = useState("")
-
-  const { user } = useStore()
 
   useEffect(() => {
     if (totalPrice > 0) {
@@ -265,6 +262,7 @@ const NewInvoiceForm = () => {
       </main>
         :
         <Invoice
+          user={user}
           setShow={setShow}
           name={name}
           vatId={vatId}

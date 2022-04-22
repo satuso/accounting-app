@@ -1,27 +1,14 @@
-import React, { useState } from "react"
+import entryReducer from "./reducers/entryReducer"
+import userReducer from "./reducers/userReducer"
+import notificationReducer from "./reducers/notificationReducer"
+import { configureStore } from "@reduxjs/toolkit"
 
-const Store = React.createContext()
-Store.displayName = "Store"
-
-export const useStore = () => React.useContext(Store)
-
-export const StoreProvider = ({ children }) => {
-  const [user, setUser] = useState(null)
-  const [entries, setEntries] = useState([])
-  const [users, setUsers] = useState([])
-  const [notification, setNotification] = useState("")
-  const [style, setStyle] = useState("")
-
-  const setMessage = (msg, type) => {
-    setNotification(msg)
-    setStyle(type)
-    setTimeout(() =>{
-      setNotification("")
-      setStyle("")
-    }, 5000)
+const store = configureStore({
+  reducer: {
+    entries: entryReducer,
+    users: userReducer,
+    notification: notificationReducer
   }
+})
 
-  return (
-    <Store.Provider value={{ user, setUser, entries, setEntries, users, setUsers, notification, setMessage, style }}>{children}</Store.Provider>
-  )
-}
+export default store

@@ -3,14 +3,11 @@ import Alert from "react-bootstrap/Alert"
 import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
 import usersService from "../services/users"
-import { useStore } from "../store"
 
-const EditProfileForm = ({ show, setShow }) => {
-  const { user, setUser, setMessage } = useStore()
-
+const EditProfileForm = ({ show, setShow, user, setUser }) => {
   const [email, setEmail] = useState(user.email) 
   const [password, setPassword] = useState("")
-  const [passwordConfirm, setPasswordConfirm] = useState("")  
+  const [passwordConfirm, setPasswordConfirm] = useState("")
   const [name, setName] = useState(user.name)
   const [businessId, setBusinessId] = useState(user.businessId) 
   const [vatId, setVatId] = useState(user.vatId) 
@@ -49,13 +46,13 @@ const EditProfileForm = ({ show, setShow }) => {
         setPassword("")
         setPasswordConfirm("")
         setShow(false)
-        setMessage("Tiedot päivitetty", "success")
+        //setMessage("Tiedot päivitetty", "success")
       } else {
-        setMessage("Salasana ei täsmää", "danger")
+        //setMessage("Salasana ei täsmää", "danger")
       }
     } catch (exception) {
       console.log(exception)
-      setMessage("Tietojen päivittäminen epäonnistui", "danger")
+      //setMessage("Tietojen päivittäminen epäonnistui", "danger")
     }
   }
 

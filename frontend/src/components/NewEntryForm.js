@@ -3,11 +3,11 @@ import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
 import Card from "react-bootstrap/Card"
 import { useNavigate } from "react-router-dom"
-import entryService from "../services/entries"
-import { useStore } from "../store"
 import EntryPreview from "./EntryPreview"
+import { useDispatch } from "react-redux"
+import { createEntry } from "../reducers/entryReducer"
 
-const NewEntryForm = () => {
+const NewEntryForm = ({ user }) => {
   const [show, setShow] = useState(false)
   const [date, setDate] = useState("")
   const [description, setDescription] = useState("")
@@ -23,7 +23,7 @@ const NewEntryForm = () => {
   const [priceWithoutVat, setPriceWithoutVat] = useState(0)
   const [sum, setSum] = useState(0)
 
-  const { user, setMessage } = useStore()
+  const dispatch = useDispatch()
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -69,9 +69,13 @@ const NewEntryForm = () => {
   const submitForm = async (e) => {
     e.preventDefault()
     try {
-      await entryService.create({
+      const obj = {
         date, description, price, totalPrice, unit, amount, type, vatPercent, vatAmount, includeVat, priceWithVat, priceWithoutVat, sum
-      })
+      }
+      /*await entryService.create({
+        date, description, price, totalPrice, unit, amount, type, vatPercent, vatAmount, includeVat, priceWithVat, priceWithoutVat, sum
+      })*/
+      dispatch(createEntry(obj))
       setDate("")
       setDescription("")
       setType("")
@@ -79,9 +83,10 @@ const NewEntryForm = () => {
       setIncludeVat(true)
 
       navigate("/entries")
-      setMessage("Tietueen lisääminen onnistui", "success")
+      //setMessage("Tietueen lisääminen onnistui", "success")
     } catch (exception) {
-      setMessage("Tietueen lisääminen epäonnistui", "danger")
+      console.log(exception)
+      //setMessage("Tietueen lisääminen epäonnistui", "danger")
     }
   }
 
