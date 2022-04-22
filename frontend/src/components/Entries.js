@@ -3,50 +3,50 @@ import Table from "react-bootstrap/Table"
 import Entry from "./Entry"
 import { useDispatch } from "react-redux"
 import { deleteEntry } from "../reducers/entryReducer"
+import { setNotification } from "../reducers/notificationReducer"
 
 const Entries = ({ user, entries }) => {
   const dispatch = useDispatch()
 
-  const entriesByUser = user && entries.filter(entry => entry.user?.id === user?.id)
+  const entriesByUser = entries?.filter(entry => entry.user.id === user?.id)
   const incomeEntries = entriesByUser?.filter(entry => entry.type === "Tulo")
   const expenseEntries = entriesByUser?.filter(entry => entry.type === "Kulu")
 
-  //income:
-  //vat24%
+  //Calculate Vat:
+  //incomevat24%
   const vat24Entries = incomeEntries?.filter(entry => entry.vatPercent === 24)
   const vat24List = vat24Entries?.map(entry => entry.vatAmount)
   const withoutVat24List = vat24Entries?.map(entry => entry.totalPrice)
   const total24 = withoutVat24List?.concat(vat24List)
-  //vat14%
+  //incomevat14%
   const vat14Entries = incomeEntries?.filter(entry => entry.vatPercent === 14)
   const vat14List = vat14Entries?.map(entry => entry.vatAmount)
   const withoutVat14List = vat14Entries?.map(entry => entry.totalPrice)
   const total14 = withoutVat14List?.concat(vat14List)
-  //vat10%
+  //incomevat10%
   const vat10Entries = incomeEntries?.filter(entry => entry.vatPercent === 10)
   const vat10List = vat10Entries?.map(entry => entry.vatAmount)
   const withoutVat10List = vat10Entries?.map(entry => entry.totalPrice)
   const total10 = withoutVat10List?.concat(vat10List)
-  //vat0%
+  //incomevat0%
   const vat0Entries = incomeEntries?.filter(entry => entry.vatPercent === 0)
   const withoutVat0List = vat0Entries?.map(entry => entry.totalPrice)
-  //expenses:
-  //vat24%
+  //expensesvat24%
   const vat24EntriesE = expenseEntries?.filter(entry => entry.vatPercent === 24)
   const vat24ListE = vat24EntriesE?.map(entry => entry.vatAmount)
   const withoutVat24ListE = vat24EntriesE?.map(entry => entry.totalPrice)
   const total24E = withoutVat24ListE?.concat(vat24ListE)
-  //vat14%
+  //expensesvat14%
   const vat14EntriesE = expenseEntries?.filter(entry => entry.vatPercent === 14)
   const vat14ListE = vat14EntriesE?.map(entry => entry.vatAmount)
   const withoutVat14ListE = vat14EntriesE?.map(entry => entry.totalPrice)
   const total14E = withoutVat14ListE?.concat(vat14ListE)
-  //vat10%
+  //expensesvat10%
   const vat10EntriesE = expenseEntries?.filter(entry => entry.vatPercent === 10)
   const vat10ListE = vat10EntriesE?.map(entry => entry.vatAmount)
   const withoutVat10ListE = vat10EntriesE?.map(entry => entry.totalPrice)
   const total10E = withoutVat10ListE?.concat(vat10ListE)
-  //vat0%
+  //expensesvat0%
   const vat0EntriesE = expenseEntries?.filter(entry => entry.vatPercent === 0)
   const withoutVat0ListE = vat0EntriesE?.map(entry => entry.totalPrice)
 
@@ -67,9 +67,9 @@ const Entries = ({ user, entries }) => {
     if (window.confirm("Haluatko varmasti poistaa tietueen?")){
       try {
         dispatch(deleteEntry(entry.id, entry, user))
-        //setMessage("Tietue poistettu", "success")
+        dispatch(setNotification("Tietue poistettu", "success"))
       } catch (exception) {
-        //setMessage("Tietueen poistaminen epäonnistui", "danger")
+        dispatch(setNotification("Tietueen poistaminen epäonnistui", "danger"))
       }
     }
   }
@@ -79,6 +79,7 @@ const Entries = ({ user, entries }) => {
   return (
     <main>
       <h2>Kirjanpito</h2>
+      <hr/>
       <p>Vuosi 2022</p>
       <Table striped bordered hover size="sm">
         <thead>
@@ -99,7 +100,7 @@ const Entries = ({ user, entries }) => {
           </tr>
         </thead>
         <tbody>
-          {entries.map((entry, index) => <Entry key={entry.id} index={index} entry={entry} removeEntry={removeEntry} user={user}/>)}
+          {entriesByUser.map((entry, index) => <Entry key={entry.id} index={index} entry={entry} removeEntry={removeEntry} user={user}/>)}
         </tbody>
       </Table>
       <br/>

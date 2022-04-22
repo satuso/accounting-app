@@ -27,7 +27,8 @@ const Invoice = ({
   bic,
   interest,
   refNum,
-  dueDate
+  dueDate,
+  no
 }) => {
   const printRef = React.useRef()
 
@@ -55,10 +56,11 @@ const Invoice = ({
         <div className="invoice-top">
           <div className="invoice-address-container">
             <div className="invoice-address">
+              <span><b>Lähettäjä</b></span>
               <h4>{user.name}</h4>
               <span>{user.address}</span>
               <span>{user.postalCode} {user.city}</span>
-              <span>Y-tunnus: {user.businessId}</span>
+              <span>{user.businessId ? `Y-tunnus: ${user.businessId}` : ""}</span>
               <span>{user.vatId ? `Alv-tunnus: ${user.vatId}` : ""}</span>
             </div>
             <div className="invoice-address">
@@ -75,7 +77,7 @@ const Invoice = ({
               <h4>Lasku</h4>
             </div>
             <div className="invoice-address">
-              <span>Laskun nro: </span>
+              <span>Laskun nro: {no}</span>
               <span>Päiväys: {date}</span>
               <span>Eräpäivä: {dueDate}</span>
               <span>Viivästyskorko: {interest} %</span>
@@ -128,7 +130,7 @@ const Invoice = ({
             </tr>
             <tr>
               <th height="100" width="100">Maksajan nimi ja osoite</th>
-              <td height="100"> </td>
+              <td height="100">{name} {address}</td>
               <td colSpan={2}></td>
             </tr>
             <tr>
@@ -140,13 +142,13 @@ const Invoice = ({
               <th>Allekirjoitus</th>
               <td></td>
               <th width="150">Viitenumero</th>
-              <td>123344</td>
+              <td>{refNum}</td>
             </tr>
             <tr>
               <td></td>
               <td></td>
               <th>Eräpäivä</th>
-              <td>15.5.2022</td>
+              <td>{dueDate}</td>
             </tr>
             <tr>
               <td></td>

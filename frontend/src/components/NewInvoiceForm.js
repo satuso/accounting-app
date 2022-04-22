@@ -3,6 +3,8 @@ import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
 import Card from "react-bootstrap/Card"
 import Invoice from "./Invoice"
+import { useDispatch } from "react-redux"
+import { setNotification } from "../reducers/notificationReducer"
 
 const NewInvoiceForm = ({ user }) => {
   const [show, setShow] = useState(false)
@@ -28,6 +30,9 @@ const NewInvoiceForm = ({ user }) => {
   const [interest, setInterest] = useState(8)
   const [refNum, setRefNum] = useState("")
   const [dueDate, setDueDate] = useState("")
+  const [no, setNo] = useState(0)
+
+  const dispatch = useDispatch()
 
   useEffect(() => {
     if (totalPrice > 0) {
@@ -57,12 +62,14 @@ const NewInvoiceForm = ({ user }) => {
       setPriceWithoutVat(totalPrice)
       setSum(totalPrice + vatAmount)
       setShow(true)
+      dispatch(setNotification("Lasku luotu. Tallenna lasku koneellesi pdf:nä", "success"))
     }
     if (includeVat === "Kyllä"){
       setPriceWithVat(totalPrice)
       setPriceWithoutVat(totalPrice - vatAmount)
       setSum(totalPrice)
       setShow(true)
+      dispatch(setNotification("Lasku luotu. Tallenna lasku koneellesi pdf:nä", "success"))
     }
   }
 
@@ -76,8 +83,10 @@ const NewInvoiceForm = ({ user }) => {
     <>
       {!show ? <main className="form">
         <Card>
+          <Card.Header>
+            <Card.Title>Luo Lasku</Card.Title>
+          </Card.Header>
           <Card.Body>
-            <Card.Title>Luo lasku</Card.Title>
             <Form onSubmit={calculate}>
               <Form.Group className="mb-2">
                 <Form.Text>Laskutettavan yrityksen tiedot:</Form.Text>
@@ -161,6 +170,14 @@ const NewInvoiceForm = ({ user }) => {
               </Form.Group>
               <br/>
               <Form.Group className="mb-2">
+                <Form.Group className="mb-2">
+                  <Form.Label>Laskun numero</Form.Label>
+                  <Form.Control
+                    type="number"
+                    value={no}
+                    onChange={({target}) => setNo(target.value)}
+                  />
+                </Form.Group>
                 <Form.Label>Laskun päiväys</Form.Label>
                 <Form.Control 
                   type="date"
@@ -186,8 +203,8 @@ const NewInvoiceForm = ({ user }) => {
                   value={interest}
                   onChange={({target}) => setInterest(target.value)}
                 >
-                  <option value={8}>Ei</option>
-                  <option value={7}>Kyllä</option>
+                  <option value={8}>8%</option>
+                  <option value={7}>7%</option>
                 </Form.Control>
               </Form.Group>
               <Form.Group className="mb-2">
@@ -286,6 +303,7 @@ const NewInvoiceForm = ({ user }) => {
           interest={interest}
           refNum={refNum}
           dueDate={dueDate}
+          no={no}
         />}
     </>
   )

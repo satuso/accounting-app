@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom"
 import EntryPreview from "./EntryPreview"
 import { useDispatch } from "react-redux"
 import { createEntry } from "../reducers/entryReducer"
+import { setNotification } from "../reducers/notificationReducer"
 
 const NewEntryForm = ({ user }) => {
   const [show, setShow] = useState(false)
@@ -72,9 +73,6 @@ const NewEntryForm = ({ user }) => {
       const obj = {
         date, description, price, totalPrice, unit, amount, type, vatPercent, vatAmount, includeVat, priceWithVat, priceWithoutVat, sum
       }
-      /*await entryService.create({
-        date, description, price, totalPrice, unit, amount, type, vatPercent, vatAmount, includeVat, priceWithVat, priceWithoutVat, sum
-      })*/
       dispatch(createEntry(obj))
       setDate("")
       setDescription("")
@@ -83,10 +81,10 @@ const NewEntryForm = ({ user }) => {
       setIncludeVat(true)
 
       navigate("/entries")
-      //setMessage("Tietueen lisääminen onnistui", "success")
+      dispatch(setNotification("Tietueen lisääminen onnistui", "success"))
     } catch (exception) {
       console.log(exception)
-      //setMessage("Tietueen lisääminen epäonnistui", "danger")
+      dispatch(setNotification("Tietueen lisääminen epäonnistui", "danger"))
     }
   }
 
@@ -94,10 +92,12 @@ const NewEntryForm = ({ user }) => {
 
   return (
     <main className="form">
-      {!show ? 
+      {!show ?
         <Card>
-          <Card.Body>
+          <Card.Header>
             <Card.Title>Lisää uusi tietue kirjanpitoon</Card.Title>
+          </Card.Header>
+          <Card.Body>
             <Form>
               <Form.Group className="mb-3">
                 <Form.Label>Päivämäärä *</Form.Label>

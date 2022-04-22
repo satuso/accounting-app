@@ -5,16 +5,18 @@ import Card from "react-bootstrap/Card"
 import { useNavigate } from "react-router-dom"
 import loginService from "../services/login"
 import entryService from "../services/entries"
+import { useDispatch } from "react-redux"
+import { setNotification } from "../reducers/notificationReducer"
 
-const Login = ({ user, setUser }) => {
+const Login = ({ setUser }) => {
   const [email, setEmail] = useState("") 
   const [password, setPassword] = useState("")
 
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    console.log("click")
     try {
       const loggedInUser = await loginService.login({
         email, password
@@ -22,15 +24,15 @@ const Login = ({ user, setUser }) => {
       window.localStorage.setItem(
         "loggedInUser", JSON.stringify(loggedInUser)
       )
+      entryService.setToken(loggedInUser.token)
       setUser(loggedInUser)
-      entryService.setToken(user.token)
       setEmail("")
       setPassword("")
       navigate("/profile")
-      //setMessage("Kirjautuminen onnistui", "success")
+      dispatch(setNotification("Kirjautuminen onnistui", "success"))
     } catch (exception) {
       console.log(exception)
-      //setMessage("Kirjautuminen epäonnistui", "danger")
+      dispatch(setNotification("Kirjautuminen epäonnistui", "danger"))
     }
   }
 

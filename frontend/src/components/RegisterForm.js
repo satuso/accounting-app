@@ -6,21 +6,16 @@ import { useNavigate } from "react-router-dom"
 import usersService from "../services/users"
 import loginService from "../services/login"
 import entryService from "../services/entries"
+import { useDispatch } from "react-redux"
+import { setNotification } from "../reducers/notificationReducer"
 
 const RegisterForm = ({ setUser, users }) => {
   const [email, setEmail] = useState("") 
   const [password, setPassword] = useState("") 
   const [passwordConfirm, setPasswordConfirm] = useState("") 
-  const [name, setName] = useState("") 
-  const [businessId, setBusinessId] = useState("") 
-  const [vatId, setVatId] = useState("") 
-  const [address, setAddress] = useState("")
-  const [postalCode, setPostalCode] = useState("")
-  const [city, setCity] = useState("")
-  const [iban, setIban] = useState("")
-  const [bic, setBic] = useState("")
 
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const handleRegister = async (e) => {
     e.preventDefault()
@@ -28,37 +23,39 @@ const RegisterForm = ({ setUser, users }) => {
       if (users.length > 0){
         const emails = users.map(user => user.email.toLowerCase())
         if (emails.includes(email.toLowerCase())){
-          return //setMessage("Sähköposti on jo käytössä", "danger")
+          return dispatch(setNotification("Sähköposti on jo käytössä", "danger"))
         }
       }
       if (password === passwordConfirm){
         await usersService.create({
-          email, password, name, businessId, vatId, address, postalCode, city, iban, bic
+          email: email,
+          password: password,
+          name: "",
+          businessId: "",
+          vatId: "",
+          address: "",
+          postalCode: "",
+          city: "",
+          iban: "",
+          bic: ""
         })
         const user = await loginService.login({
           email, password
         })
         window.localStorage.setItem(
           "loggedInUser", JSON.stringify(user)
-        ) 
+        )
         entryService.setToken(user.token)
         setUser(user)
         setEmail("")
         setPassword("")
-        setName("")
-        setBusinessId("")
-        setVatId("")
-        setAddress("")
-        setPostalCode("")
-        setCity("")
+        dispatch(setNotification("Tunnus luotu! Olet nyt kirjautuneena sisään", "success"))
         navigate("/profile")
-        //setMessage("Tunnus luotu! Olet nyt kirjautuneena sisään", "success")
       } else {
-        //setMessage("Salasana ei täsmää", "danger")
+        dispatch(setNotification("Salasana ei täsmää", "danger"))
       }
     } catch (exception) {
-      console.log(exception)
-      //setMessage("Rekisteröityminen epäonnistui", "danger")
+      dispatch(setNotification("Rekisteröityminen epäonnistui", "danger"))
     }
   }
 
@@ -78,89 +75,6 @@ const RegisterForm = ({ setUser, users }) => {
                 required
               />
               <Form.Text className="text-muted">Emme jaa sähköpostiosoitettasi.</Form.Text>
-            </Form.Group>
-            <Form.Group className="mb-2">
-              <Form.Label>Yrityksen nimi *</Form.Label>
-              <Form.Control 
-                type="text"
-                placeholder="Yrityksen nimi"
-                value={name}
-                onChange={({ target }) => setName(target.value)}
-                required
-              />
-            </Form.Group>
-            <Form.Group className="mb-2">
-              <Form.Label>Y-tunnus *</Form.Label>
-              <Form.Control 
-                type="text"
-                placeholder="Y-tunnus"
-                value={businessId}
-                onChange={({ target }) => setBusinessId(target.value)}
-                minLength={9}
-                maxLength={9}
-                required
-              />
-            </Form.Group>
-            <Form.Group className="mb-2">
-              <Form.Label>ALV-numero</Form.Label>
-              <Form.Control 
-                type="text"
-                placeholder="ALV-numero"
-                value={vatId}
-                minLength={10}
-                maxLength={10}
-                onChange={({ target }) => setVatId(target.value)}
-              />
-            </Form.Group>
-            <Form.Group className="mb-2">
-              <Form.Label>Katusoite *</Form.Label>
-              <Form.Control 
-                type="text"
-                placeholder="Katuosoite"
-                value={address}
-                onChange={({ target }) => setAddress(target.value)}
-                required
-              />
-            </Form.Group>
-            <Form.Group className="mb-2">
-              <Form.Label>Postinumero *</Form.Label>
-              <Form.Control 
-                type="tel"
-                placeholder="Postinumero"
-                value={postalCode}
-                onChange={({ target }) => setPostalCode(target.value)}
-                minLength={5}
-                maxLength={5}
-                required
-              />
-            </Form.Group>
-            <Form.Group className="mb-2">
-              <Form.Label>Kaupunki *</Form.Label>
-              <Form.Control 
-                type="text"
-                placeholder="Kaupunki"
-                value={city}
-                onChange={({ target }) => setCity(target.value)}
-                required
-              />
-            </Form.Group>
-            <Form.Group className="mb-2">
-              <Form.Label>IBAN-tilinumero</Form.Label>
-              <Form.Control 
-                type="text"
-                placeholder="IBAN-tilinumero"
-                value={iban}
-                onChange={({ target }) => setIban(target.value)}
-              />
-            </Form.Group>
-            <Form.Group className="mb-2">
-              <Form.Label>Pankin BIC-tunniste</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Pankin BIC-tunniste"
-                value={bic}
-                onChange={({ target }) => setBic(target.value)}  
-              />
             </Form.Group>
             <Form.Group className="mb-2">
               <Form.Label>Salasana *</Form.Label>

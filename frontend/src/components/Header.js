@@ -5,15 +5,18 @@ import Nav from "react-bootstrap/Nav"
 import Container from "react-bootstrap/Container"
 import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
+import { useDispatch } from "react-redux"
+import { setNotification } from "../reducers/notificationReducer"
 
 const Header = ({ user, setUser }) => {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const handleLogout = () => {
     window.localStorage.removeItem("loggedInUser")
     setUser(null)
     navigate("/")
-    //setMessage("Kirjauduit ulos", "success")
+    dispatch(setNotification("Kirjauduit ulos", "success"))
   }
 
   return (

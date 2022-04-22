@@ -39,6 +39,12 @@ table, th, td  {
   font-weight: bold;
 }
 
+main {
+  width: 80%;
+  margin: 0 auto;
+  margin-top: 1em;
+}
+
 .form {
   margin: 0 auto;
   width: 550px;
