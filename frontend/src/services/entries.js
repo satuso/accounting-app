@@ -1,5 +1,5 @@
 import axios from "axios"
-const baseUrl = "http://localhost:3001/api/entries"
+const baseUrl = "https://satuso-accounting-backend.herokuapp.com/api/entries"
 
 let token = null
 

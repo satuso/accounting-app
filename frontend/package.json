@@ -24,7 +24,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint --fix --ext .js,.jsx ."
+    "lint": "eslint --fix --ext .js,.jsx .",
+    "publishToHeroku": "cd ../ && git subtree push --prefix frontend satuso-accounting-app master || true"
   },
   "eslintConfig": {
     "extends": [
