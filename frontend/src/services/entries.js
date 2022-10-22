@@ -1,5 +1,5 @@
 import axios from "axios"
-const baseUrl = "https://satuso-accounting-backend.herokuapp.com/api/entries"
+const baseUrl = process.env.REACT_APP_BASE_URL + "entries"
 
 let token = null
 
